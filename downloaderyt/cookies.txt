@@ -1,0 +1,6 @@
+# HTTP Cookie File
+.youtube.com    TRUE    /    FALSE   1692110199    PREF    f1=50000000
+.youtube.com    TRUE    /    FALSE   1692110199    YSC    zMEv_MvhIm0
+.youtube.com    TRUE    /    FALSE   1692110199    VISITOR_INFO1_LIVE    3xxz_mQql94
+.youtube.com    TRUE    /    FALSE   1692110199    CONSENT    fBdgtBxTdd1dtdRz
+.youtube.com    TRUE    /    FALSE   1692110199    LOGIN_INFO    gQ44dFGvdoU1zjR2M0C5oy6dbbmqlVV4dFd0uCnsZ8F...
