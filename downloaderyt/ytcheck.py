@@ -35,15 +35,17 @@ if st.button("Download"):
                 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
                     ydl.download([link])
 
-                video_path = os.path.join(download_dir, 'Downloaded_Video.mp4')  # Path to the downloaded video
+                # Get the downloaded file path dynamically (handles different formats)
+                downloaded_file = [f for f in os.listdir(download_dir) if f.startswith("Downloaded_Video")][0]
+                video_path = os.path.join(download_dir, downloaded_file)
 
                 # Provide a download button for the user to download the video
                 with open(video_path, 'rb') as file:
                     st.download_button(
                         label="Click to Download the Video",
                         data=file,
-                        file_name='Downloaded_Video.mp4',
-                        mime="video/mp4"
+                        file_name=downloaded_file,
+                        mime="video/mp4"  # Use appropriate mime type if needed (e.g., video/webm)
                     )
                 st.success("✅ Download completed! Click the button to download your video.")
             except Exception as e:
