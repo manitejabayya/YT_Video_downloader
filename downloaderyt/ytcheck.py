@@ -8,39 +8,52 @@ st.write("Download videos from YouTube and other platforms easily!")
 # Input for the video link
 link = st.text_input("Enter the video link below:", "")
 
-# Temporary directory to save the video
+# Directory to save the downloaded video
 download_dir = './downloads'
 os.makedirs(download_dir, exist_ok=True)
 
+# Ask the user to upload the cookies.txt file for authentication
+cookies_file = st.file_uploader("Upload your cookies.txt file for YouTube login", type="txt")
+
 if st.button("Download"):
     if link:
-        st.info("Downloading, please wait...")
-        
-        ydl_opts = {
-            'format': 'best',  
-            'outtmpl': os.path.join(download_dir, 'Downloaded_Video.%(ext)s'),  
-        }
+        if cookies_file:
+            # Save the uploaded cookies file temporarily
+            with open("cookies.txt", "wb") as f:
+                f.write(cookies_file.getbuffer())
+            
+            st.info("Downloading, please wait...")
 
-        try:
-            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                ydl.download([link])
+            # Set download options with the cookies.txt file for YouTube authentication
+            ydl_opts = {
+                'format': 'best',  # Best available format
+                'outtmpl': os.path.join(download_dir, 'Downloaded_Video.%(ext)s'),  # Output file template
+                'cookiefile': 'cookies.txt',  # Path to the cookies.txt file
+            }
 
-            video_path = os.path.join(download_dir, 'Downloaded_Video.mp4')  # Adjust extension if needed
+            try:
+                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                    ydl.download([link])
 
-            # Display a download button to download the video file
-            with open(video_path, 'rb') as file:
-                st.download_button(
-                    label="Click to Download the Video",
-                    data=file,
-                    file_name='Downloaded_Video.mp4',
-                    mime="video/mp4"
-                )
-            st.success("✅ Download completed! Click the button to download your video.")
-        except Exception as e:
-            st.error(f"❌ Failed to download the video. Error: {str(e)}")
+                video_path = os.path.join(download_dir, 'Downloaded_Video.mp4')  # Path to the downloaded video
+
+                # Provide a download button for the user to download the video
+                with open(video_path, 'rb') as file:
+                    st.download_button(
+                        label="Click to Download the Video",
+                        data=file,
+                        file_name='Downloaded_Video.mp4',
+                        mime="video/mp4"
+                    )
+                st.success("✅ Download completed! Click the button to download your video.")
+            except Exception as e:
+                st.error(f"❌ Failed to download the video. Error: {str(e)}")
+        else:
+            st.warning("⚠️ Please upload your cookies.txt file to authenticate.")
     else:
         st.warning("⚠️ Please enter a valid video link.")
 
+# Footer with credits
 st.markdown("""
     ---
     Developed by **Bayya Maniteja**  
